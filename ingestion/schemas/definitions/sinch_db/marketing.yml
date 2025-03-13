@@ -1,0 +1,17 @@
+database: postgre 
+schema: public         
+table: marketing           
+columns:
+  campaignid:
+    type: "VARCHAR(255)"
+    constraints: ["NOT NULL"]
+  targetaudience:
+    type: "VARCHAR(255)"
+  campaignstartdate:
+    type: "DATE"
+    constraints: ["NOT NULL"]
+    format: "YYYY-MM-DD"
+  campaignenddate:
+    type: "DATE"
+    constraints: ["NOT NULL"]
+    format: "YYYY-MM-DD"
