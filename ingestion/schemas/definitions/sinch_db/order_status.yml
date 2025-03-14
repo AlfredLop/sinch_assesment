@@ -15,7 +15,7 @@ partition:
   column: "status_timestamp"
   date_partition_format: "DD/MM/YYYY HH24:MI:SS"
 indexes:
-  - name: "idx_order_id"
+  - name: "idx_order_id_status"
     columns: ["order_id"]
   - name: "idx_status"
     columns: ["status"]

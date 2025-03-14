@@ -1,6 +1,6 @@
 database: postgres
 schema: public
-table: orders
+table: orders_items
 columns:
   order_id:
     type: "VARCHAR(100)"
@@ -10,7 +10,7 @@ columns:
   price:
     type: "DECIMAL(10,2)"
 indexes:
-  - name: "idx_order_id"
+  - name: "idx_order_id_items"
     columns: ["order_id"]
   - name: "idx_item_name"
     columns: ["item_name"]

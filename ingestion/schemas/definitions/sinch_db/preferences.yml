@@ -1,6 +1,6 @@
 database: postgre
 schema: public
-table: member_preferences
+table: preferences
 columns:
   member_id:
     type: "VARCHAR(100)"
@@ -8,5 +8,5 @@ columns:
   preference:
     type: "VARCHAR(255)"
 indexes:
-  - name: "idx_member_id"
+  - name: "idx_member_id_pref"
     columns: ["member_id"]
