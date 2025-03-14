@@ -1,18 +1,21 @@
 database: postgres
 schema: public
-table: orders_items
+table: orders_items_raw
 columns:
-  order_id:
+  orderid:
     type: "VARCHAR(100)"
-    constraints: ["NOT NULL"]
-  item_name:
+  itemname:
     type: "VARCHAR(255)"
   price:
-    type: "DECIMAL(10,2)"
+    type: "VARCHAR(255)"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
 indexes:
   - name: "idx_order_id_items"
-    columns: ["order_id"]
+    columns: ["orderid"]
   - name: "idx_item_name"
-    columns: ["item_name"]
+    columns: ["itemname"]
   - name: "idx_price"
     columns: ["price"]

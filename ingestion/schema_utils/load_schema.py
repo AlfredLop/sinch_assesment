@@ -3,6 +3,11 @@ import os
 import logging
 from typing import Dict, Any, List
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
+)
+
 class SchemaLoader:
     def __init__(self, schema_dir: str = "ingestion/schemas/definitions/sinch_db") -> None:
         self.schema_dir = schema_dir

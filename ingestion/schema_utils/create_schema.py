@@ -7,6 +7,10 @@ sys.path.append(project_root)
 from ingestion.utils.db_connection import DatabaseConnection
 from typing import Dict, Any
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
+)
 
 class SchemaCreator:
     def __init__(self, db_config: Dict[str, str]) -> None:

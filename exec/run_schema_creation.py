@@ -22,6 +22,8 @@ def main():
 
     for ddl in ddls:
         create_tables.create_table(ddl)
+    
+    
     create_tables.close()
 
 if __name__ == "__main__":

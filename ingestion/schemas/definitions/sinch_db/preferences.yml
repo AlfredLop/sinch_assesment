@@ -1,12 +1,15 @@
 database: postgre
 schema: public
-table: preferences
+table: preferences_raw
 columns:
-  member_id:
-    type: "VARCHAR(100)"
-    constraints: ["NOT NULL"]
+  memberid:
+    type: "VARCHAR(255)"
   preference:
     type: "VARCHAR(255)"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
 indexes:
   - name: "idx_member_id_pref"
-    columns: ["member_id"]
+    columns: ["memberid"]

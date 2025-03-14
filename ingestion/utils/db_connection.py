@@ -2,8 +2,10 @@ import psycopg2
 import logging
 from typing import Optional
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
+)
 
 class DatabaseConnection:
     def __init__(self, dbname: str, user: str, password: str, host: str = "postgres", port: str = "5432") -> None:

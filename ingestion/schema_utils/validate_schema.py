@@ -10,8 +10,10 @@ from ingestion.utils.db_connection import DatabaseConnection
 from ingestion.schema_utils.create_schema import load_db_config
 
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s"
+)
 
 
 EQUIVALENT_TYPES = {

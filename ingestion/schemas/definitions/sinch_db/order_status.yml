@@ -1,23 +1,23 @@
 database: postgres
 schema: public
-table: order_status
+table: order_status_raw
 columns:
-  order_id:
-    type: "VARCHAR(100)"
-    constraints: ["NOT NULL"]
+  orderid:
+    type: "VARCHAR(255)"
   status:
     type: "VARCHAR(255)"
-  status_timestamp:
-    type: "TIMESTAMP"
+  statustimestamp:
+    type: "VARCHAR(255)"
     format: "DD/MM/YYYY HH24:MI:SS"
-partition:
-  type: "RANGE"
-  column: "status_timestamp"
-  date_partition_format: "DD/MM/YYYY HH24:MI:SS"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
+  
 indexes:
   - name: "idx_order_id_status"
-    columns: ["order_id"]
+    columns: ["orderid"]
   - name: "idx_status"
     columns: ["status"]
   - name: "idx_status_timestamp"
-    columns: ["status_timestamp"]
+    columns: ["statustimestamp"]

@@ -1,25 +1,28 @@
 database: postgres
 schema: public         
-table: members           
+table: members_raw        
 columns:
   id:
-    type: "VARCHAR(100)"
-    constraints: ["NOT NULL"]
+    type: "VARCHAR(255)"
   name:
     type: "VARCHAR(255)"
-  membership_type:
-    type: "VARCHAR(50)"
-  join_date:
-    type: "DATE"
+  membershiptype:
+    type: "VARCHAR(255)"
+  joindate:
+    type: "VARCHAR(255)"
     format: "DD-MM-YYYY"
-  expiration_date:
-    type: "DATE"
+  expirationdate:
+    type: "VARCHAR(255)"
     format: "DD-MM-YYYY"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
 
 indexes:
   - name: "idx_membership_type"
-    columns: ["membership_type"]
+    columns: ["membershiptype"]
   - name: "idx_join_date"
-    columns: ["join_date"]
+    columns: ["joindate"]
   - name: "idx_expiration_date"
-    columns: ["expiration_date"]
+    columns: ["expirationdate"]

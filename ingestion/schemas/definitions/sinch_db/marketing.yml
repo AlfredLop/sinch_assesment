@@ -1,20 +1,23 @@
 database: postgres
 schema: public
-table: marketing
+table: marketing_raw
 columns:
   campaignid:
-    type: "VARCHAR(100)"
-    constraints: ["NOT NULL"]
+    type: "VARCHAR(255)"
   targetaudience:
     type: "VARCHAR(255)"
   storeid:
     type: "VARCHAR(255)"
   campaignstartdate:
-    type: "DATE"
-    format: "DD-MM-YYYY"
+    type: "VARCHAR(255)"
+    format: "DD/MM/YYYY"
   campaignenddate:
-    type: "DATE"
-    format: "DD-MM-YYYY"
+    type: "VARCHAR(255)"
+    format: "DD/MM/YYYY"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
 
 indexes:
   - name: "idx_campaign_dates"

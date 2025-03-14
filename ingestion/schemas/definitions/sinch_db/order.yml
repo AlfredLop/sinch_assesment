@@ -1,0 +1,40 @@
+database: postgres
+schema: public
+table: orders_raw
+columns:
+  orderid:
+    type: "VARCHAR(255)"
+    constraints: ["NOT NULL"]
+  memberid:
+    type: "VARCHAR(255)"
+  storeid:
+    type: "VARCHAR(255)"
+  campaignid:
+    type: "VARCHAR(255)"
+  orderdate:
+    type: "VARCHAR(255)"
+    format: "DD/MM/YYYY"
+  subtotal:
+    type: "VARCHAR(255)"
+  total:
+    type: "VARCHAR(255)"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
+
+indexes:
+  - name: "idx_order_id"
+    columns: ["orderid"]
+  - name: "idx_member_id"
+    columns: ["memberid"]
+  - name: "idx_store_id"
+    columns: ["storeid"]
+  - name: "idx_campaign_id"
+    columns: ["campaignid"]
+  - name: "idx_order_date"
+    columns: ["orderdate"]
+  - name: "idx_sub_total"
+    columns: ["subtotal"]
+  - name: "idx_total"
+    columns: ["total"]
