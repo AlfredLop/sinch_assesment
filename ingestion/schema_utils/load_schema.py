@@ -4,12 +4,14 @@ import logging
 from typing import Dict, Any, List
 
 class SchemaLoader:
-    def __init__(self, schema_dir: str = "ingestion/schemas/sinch_db") -> None:
+    def __init__(self, schema_dir: str = "ingestion/schemas/definitions/sinch_db") -> None:
         self.schema_dir = schema_dir
 
     def load_tables(self) -> List[Dict[str, Any]]:
         """Loads all table YAML files and a list of python dics with each table fields and data types."""
         tables = []
+        full_path = os.path.abspath(self.schema_dir)
+        print(f"Checking directory: {full_path}")
         try:
             for filename in os.listdir(self.schema_dir):
                 if filename.endswith(".yml"):
@@ -19,7 +21,6 @@ class SchemaLoader:
                             logging.warning(f"Skipping {filename}: Missing database/schema metadata.")
                             continue  # Skip files without metadata
                         tables.append(table_data)
-            print(tables)
             logging.info("Successfully loaded table schemas.")
         except FileNotFoundError as e:
             logging.error(f"Schema directory not found: {e}")

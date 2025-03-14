@@ -1,0 +1,22 @@
+database: postgres
+schema: public
+table: order_status
+columns:
+  order_id:
+    type: "VARCHAR(100)"
+    constraints: ["NOT NULL"]
+  status:
+    type: "VARCHAR(255)"
+  status_timestamp:
+    type: "TIMESTAMP"
+    format: "DD/MM/YYYY HH24:MI:SS"
+partition:
+  type: "RANGE"
+  column: "status_timestamp"
+indexes:
+  - name: "idx_order_id"
+    columns: ["order_id"]
+  - name: "idx_status"
+    columns: ["status"]
+  - name: "idx_status_timestamp"
+    columns: ["status_timestamp"]

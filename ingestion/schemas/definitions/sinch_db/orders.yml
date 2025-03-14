@@ -1,0 +1,38 @@
+database: postgres
+schema: public
+table: orders
+columns:
+  order_id:
+    type: "VARCHAR(100)"
+    constraints: ["NOT NULL"]
+  member_id:
+    type: "VARCHAR(100)"
+  store_id:
+    type: "VARCHAR(100)"
+  campaign_id:
+    type: "VARCHAR(100)"
+  order_date:
+    type: "DATE"
+    format: "DD/MM/YYYY"
+  sub_total:
+    type: "DECIMAL(10,2)"
+  total:
+    type: "DECIMAL(10,2)"
+partition:
+  type: "RANGE"
+  column: "order_date"
+indexes:
+  - name: "idx_order_id"
+    columns: ["order_id"]
+  - name: "idx_member_id"
+    columns: ["member_id"]
+  - name: "idx_store_id"
+    columns: ["store_id"]
+  - name: "idx_campaign_id"
+    columns: ["campaign_id"]
+  - name: "idx_order_date"
+    columns: ["order_date"]
+  - name: "idx_sub_total"
+    columns: ["sub_total"]
+  - name: "idx_total"
+    columns: ["total"]

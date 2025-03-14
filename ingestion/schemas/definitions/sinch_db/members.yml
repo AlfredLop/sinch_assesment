@@ -1,0 +1,25 @@
+database: postgres
+schema: public         
+table: members           
+columns:
+  id:
+    type: "VARCHAR(100)"
+    constraints: ["NOT NULL"]
+  name:
+    type: "VARCHAR(255)"
+  membership_type:
+    type: "VARCHAR(50)"
+  join_date:
+    type: "DATE"
+    format: "DD-MM-YYYY"
+  expiration_date:
+    type: "DATE"
+    format: "DD-MM-YYYY"
+
+indexes:
+  - name: "idx_membership_type"
+    columns: ["membership_type"]
+  - name: "idx_join_date"
+    columns: ["join_date"]
+  - name: "idx_expiration_date"
+    columns: ["expiration_date"]

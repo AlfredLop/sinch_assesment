@@ -1,0 +1,12 @@
+database: postgre
+schema: public
+table: member_preferences
+columns:
+  member_id:
+    type: "VARCHAR(100)"
+    constraints: ["NOT NULL"]
+  preference:
+    type: "VARCHAR(255)"
+indexes:
+  - name: "idx_member_id"
+    columns: ["member_id"]

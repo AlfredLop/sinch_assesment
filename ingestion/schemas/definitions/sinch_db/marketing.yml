@@ -1,17 +1,25 @@
-database: postgre 
-schema: public         
-table: marketing           
+database: postgres
+schema: public
+table: marketing
 columns:
   campaignid:
-    type: "VARCHAR(255)"
+    type: "VARCHAR(100)"
     constraints: ["NOT NULL"]
   targetaudience:
     type: "VARCHAR(255)"
+  storeid:
+    type: "VARCHAR(255)"
   campaignstartdate:
     type: "DATE"
-    constraints: ["NOT NULL"]
-    format: "YYYY-MM-DD"
+    format: "DD-MM-YYYY"
   campaignenddate:
     type: "DATE"
-    constraints: ["NOT NULL"]
-    format: "YYYY-MM-DD"
+    format: "DD-MM-YYYY"
+
+indexes:
+  - name: "idx_campaign_dates"
+    columns: ["campaignstartdate", "campaignenddate"]
+  - name: "idx_targetaudience"
+    columns: ["targetaudience"]
+  - name: "idx_storeid"
+    columns: ["storeid"]
