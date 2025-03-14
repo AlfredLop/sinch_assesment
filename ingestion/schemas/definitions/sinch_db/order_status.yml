@@ -13,6 +13,7 @@ columns:
 partition:
   type: "RANGE"
   column: "status_timestamp"
+  date_partition_format: "DD/MM/YYYY HH24:MI:SS"
 indexes:
   - name: "idx_order_id"
     columns: ["order_id"]

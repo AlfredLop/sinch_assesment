@@ -17,54 +17,76 @@ class SchemaCreator:
         self.cursor = self.db_connection.connection.cursor()
 
     def generate_create_table_ddl(self, table_data: Dict[str, Any]) -> str:
-        ddl_scripts = []
+            ddl_scripts = []
 
-        for table in table_data:
-            """Generates a CREATE TABLE statement with support for indexes and partitions."""
-            schema_name = table["schema"]
-            table_name = table["table"]
-            columns = table["columns"]
+            for table in table_data:
+                """Generates a CREATE TABLE statement with support for indexes and partitions."""
+                schema_name = table["schema"]
+                table_name = table["table"]
+                columns = table["columns"]
 
-            # Generate column definitions
-            columns_sql = []
-            for col_name, col_data in columns.items():
-                col_type = col_data["type"]
-                col_constraints = " ".join(col_data.get("constraints", []))
-                columns_sql.append(f"{col_name} {col_type} {col_constraints}".strip())
+                # Generate column definitions
+                columns_sql = []
+                for col_name, col_data in columns.items():
+                    col_type = col_data["type"]
+                    col_constraints = " ".join(col_data.get("constraints", []))
+                    columns_sql.append(f"{col_name} {col_type} {col_constraints}".strip())
 
-            columns_sql_str = ",\n  ".join(columns_sql)
+                columns_sql_str = ",\n  ".join(columns_sql)
 
-            # Check for partitioning
-            partition_clause = ""
-            partition_sql = []
-            if "partition" in table:
-                partition = table["partition"]
-                partition_type = partition.get("type", "").upper()  # RANGE, LIST, or HASH
-                partition_column = partition.get("column", "")
+                # Check for partitioning
+                partition_clause = ""
+                partition_sql = []
+                if "partition" in table:
+                    partition = table["partition"]
+                    partition_type = partition.get("type", "").upper()  # RANGE, LIST, or HASH
+                    partition_column = partition.get("column", "")
+                    date_format = partition.get("date_partition_format", "YYYY-MM-DD")  # Default to YYYY-MM-DD
 
-                if partition_type and partition_column:
-                    partition_clause = f" PARTITION BY {partition_type} ({partition_column})"
-                    
-                    # Example partition creation (adjust values as needed)
-                    if partition_type == "RANGE":
-                        partition_sql.append(f"CREATE TABLE {schema_name}.{table_name}_2023 PARTITION OF {schema_name}.{table_name} FOR VALUES FROM ('2023-01-01') TO ('2023-12-31');")
-                        partition_sql.append(f"CREATE TABLE {schema_name}.{table_name}_2024 PARTITION OF {schema_name}.{table_name} FOR VALUES FROM ('2024-01-01') TO ('2024-12-31');")
+                    if partition_type and partition_column:
+                        partition_clause = f" PARTITION BY {partition_type} ({partition_column})"
 
-            # Generate CREATE TABLE DDL
-            ddl = f"CREATE TABLE IF NOT EXISTS {schema_name}.{table_name} (\n  {columns_sql_str}\n){partition_clause};"
-            ddl_scripts.append(ddl)
+                        # Adjust partition dates based on the format
+                        if "HH24:MI:SS" in date_format:
+                            from_date_2023 = "'2023-01-01 00:00:00'"
+                            to_date_2023 = "'2023-12-31 23:59:59'"
+                            from_date_2024 = "'2024-01-01 00:00:00'"
+                            to_date_2024 = "'2024-12-31 23:59:59'"
+                        else:
+                            from_date_2023 = "'2023-01-01'"
+                            to_date_2023 = "'2023-12-31'"
+                            from_date_2024 = "'2024-01-01'"
+                            to_date_2024 = "'2024-12-31'"
 
-            # Append partition creation statements (if applicable)
-            ddl_scripts.extend(partition_sql)
+                        # Generate partition SQL with the correct format
+                        if partition_type == "RANGE":
+                            partition_sql.append(
+                                f"CREATE TABLE {schema_name}.{table_name}_2023 "
+                                f"PARTITION OF {schema_name}.{table_name} "
+                                f"FOR VALUES FROM ({from_date_2023}) TO ({to_date_2023});"
+                            )
+                            partition_sql.append(
+                                f"CREATE TABLE {schema_name}.{table_name}_2024 "
+                                f"PARTITION OF {schema_name}.{table_name} "
+                                f"FOR VALUES FROM ({from_date_2024}) TO ({to_date_2024});"
+                            )
 
-            # Check for indexes (if present in YAML)
-            if "indexes" in table:
-                for index in table["indexes"]:
-                    index_name = index["name"]
-                    index_columns = ", ".join(index["columns"])
-                    ddl_scripts.append(f"CREATE INDEX IF NOT EXISTS {index_name} ON {schema_name}.{table_name} ({index_columns});")
+                # Generate CREATE TABLE DDL
+                ddl = f"CREATE TABLE IF NOT EXISTS {schema_name}.{table_name} (\n  {columns_sql_str}\n){partition_clause};"
+                ddl_scripts.append(ddl)
 
-        return ddl_scripts
+                # Append partition creation statements (if applicable)
+                ddl_scripts.extend(partition_sql)
+
+                # Check for indexes (if present in YAML)
+                if "indexes" in table:
+                    for index in table["indexes"]:
+                        index_name = index["name"]
+                        index_columns = ", ".join(index["columns"])
+                        ddl_scripts.append(f"CREATE INDEX IF NOT EXISTS {index_name} ON {schema_name}.{table_name} ({index_columns});")
+
+            return ddl_scripts
+
 
     def create_table(self, ddl_statement:str) -> None:
         """Executes the SQL statement to create the table."""
