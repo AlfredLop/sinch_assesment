@@ -31,6 +31,14 @@ Python code ingest csv txt files, validates them agains yml file and inserts int
 - DockerFile to define image and upload to ECR.
 - Upload data using multithreading and map to distributed uploads.
 
+## Usage
+USE DOCKER COMPOSE UP TO GET THE DB GOING
+1. create virtual env
+2. install ingestion/requirements.txt file
+3. cd into exec/
+4. run python run_schema_creation
+5. run python run_data_load.py
+
 # OVERVIEW TRANSFORMATIOS
 This module uses dbt framework, to store sql transformations in a medallion architecture, including tests, and documentation.
 Models are full loads or incremental loads based on a merge incremental strategy, out of the box test like unique, not null have been used but also custom test have been created like expected positive values.
@@ -52,3 +60,11 @@ Models are full loads or incremental loads based on a merge incremental strategy
 - Use multiple threads for concurrent jobs.
 - DockerFile to define image and upload to ECR.
 - Introduce dbt metrics semantic layer to manage metrics in a centrilized location.
+
+## Usage
+USE DOCKER COMPOSE UP TO GET THE DB GOING
+1. create virtual env
+2. install transfomations/requirements.txt file
+3. cd into transfomations/dbt/sinch
+4. run dbt deps (install packages)
+5. run dbt build (this will run models and tests)
