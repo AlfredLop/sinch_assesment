@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: build_orders
+    description: "This table enriches order data by joining with marketing and members tables. The relationships are many-to-one, ensuring the grain remains at the order level."
+    columns:
+      - name: orderid
+        description: "Unique identifier for each order."
+        tests:
+          - unique
+          - not_null
+      - name: orderdate
+        description: "Date when the order was placed."
+      - name: subtotal
+        description: "Subtotal amount for the order before additional charges."
+      - name: total
+        description: "Final total amount of the order after all adjustments."
+      - name: membername
+        description: "Name of the member placing the order."
+      - name: membershiptype
+        description: "Type of membership the member holds."
+      - name: joindate
+        description: "Date when the member joined the program."
+      - name: expirationdate
+        description: "Membership expiration date."
+      - name: campaignname
+        description: "Marketing campaign linked to the order."
+      - name: targetaudience
+        description: "Intended audience for the marketing campaign."
+      - name: campaignstartdate
+        description: "Start date of the marketing campaign."
+      - name: campaignenddate
+        description: "End date of the marketing campaign."
+      - name: insert_date
+        description: "Timestamp when the record was inserted."
+
+  - name: build_order_status
+    description: "Tracks the status changes of orders over time."
+    columns:
+      - name: orderid
+        description: "Order identifier for tracking status changes."
+      - name: status
+        description: "Current status of the order (e.g., Pending, Shipped, Delivered)."
+      - name: statustimestamp
+        description: "Timestamp when the status was updated."
+      - name: insert_date
+        description: "Timestamp when the record was inserted."
+
+  - name: build_order_items
+    description: "Contains details of items included in each order."
+    columns:
+      - name: orderid
+        description: "Order identifier associated with the item."
+      - name: itemname
+        description: "Name of the item purchased."
+      - name: price
+        description: "Price of the item."
+      - name: insert_date
+        description: "Timestamp when the record was inserted."
+
+  - name: build_preferences
+    description: "Stores customer preferences for order customizations."
+    columns:
+      - name: memberid
+        description: "Unique identifier of the member."
+      - name: preference
+        description: "Customer's specific order customization preference."
+      - name: insert_date
+        description: "Timestamp when the record was inserted."

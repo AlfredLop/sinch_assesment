@@ -1,0 +1,28 @@
+database: postgres
+schema: public         
+table: members_raw        
+columns:
+  id:
+    type: "VARCHAR(255)"
+  name:
+    type: "VARCHAR(255)"
+  membershiptype:
+    type: "VARCHAR(255)"
+  joindate:
+    type: "VARCHAR(255)"
+    format: "DD-MM-YYYY"
+  expirationdate:
+    type: "VARCHAR(255)"
+    format: "DD-MM-YYYY"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
+
+indexes:
+  - name: "idx_membership_type"
+    columns: ["membershiptype"]
+  - name: "idx_join_date"
+    columns: ["joindate"]
+  - name: "idx_expiration_date"
+    columns: ["expirationdate"]

@@ -1,0 +1,133 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Deduplicates orders based on order ID, ensuring only the most recent order record is retained."
+    columns:
+      - name: orderid
+        description: "Unique identifier for each order."
+        tests:
+          - unique
+          - not_null
+
+      - name: memberid
+        description: "Identifier for the member who placed the order."
+      
+      - name: storeid
+        description: "Identifier for the store where the order was placed."
+      
+      - name: campaignid
+        description: "Campaign ID associated with the order, if applicable."
+
+      - name: orderdate
+        description: "Date when the order was placed."
+        tests:
+          - not_null
+          - expect_column_values_to_be_after:
+              column_name: orderdate
+              min_column_name: "'2000-01-01'"
+
+      - name: subtotal
+        description: "Subtotal amount before taxes or discounts."
+        tests:
+          - expect_column_values_to_be_positive:
+              column_name: subtotal
+
+      - name: total
+        description: "Final total amount after taxes and adjustments."
+        tests:
+          - expect_column_values_to_be_positive:
+              column_name: total
+
+  - name: stg_order_status
+    description: "Ensures the latest status update for each order is retained while filtering out NULL values."
+    columns:
+      - name: orderid
+        description: "Identifier for the order."
+        tests:
+          - not_null
+
+      - name: status
+        description: "Current status of the order (e.g., Submitted, Delivered, Canceled)."
+
+      - name: statustimestamp
+        description: "Timestamp indicating when the status was updated."
+        tests:
+          - not_null
+
+  - name: stg_members
+    description: "Deduplicates members based on member ID, keeping the latest membership details."
+    columns:
+      - name: memberid
+        description: "Unique identifier for a member."
+        tests:
+          - unique
+          - not_null
+
+      - name: membershiptype
+        description: "Type of membership (e.g., Bronze, Silver, Platinum)."
+
+      - name: joindate
+        description: "Date when the member joined."
+        tests:
+          - not_null
+
+      - name: expirationdate
+        description: "Date when the membership expires."
+        tests:
+          - expect_column_values_to_be_after:
+              column_name: expirationdate
+              min_column_name: joindate
+
+  - name: stg_marketing
+    description: "Deduplicates campaigns based on campaign ID, ensuring only the latest campaign data is retained."
+    columns:
+      - name: campaignid
+        description: "Unique identifier for a marketing campaign."
+        tests:
+          - unique
+          - not_null
+
+      - name: targetaudience
+        description: "Intended audience segment for the campaign."
+
+      - name: campaignstartdate
+        description: "Start date of the campaign."
+        tests:
+          - not_null
+
+      - name: campaignenddate
+        description: "End date of the campaign."
+        tests:
+          - not_null
+          - expect_column_values_to_be_after:
+              column_name: campaignenddate
+              min_column_name: campaignstartdate
+
+  - name: stg_orders_items
+    description: "Deduplicates order items, keeping only the latest price recorded for each item in an order."
+    columns:
+      - name: orderid
+        description: "Identifier for the order."
+        tests:
+          - not_null
+
+      - name: itemname
+        description: "Name of the item purchased."
+
+      - name: price
+        description: "Price of the item."
+        tests:
+          - expect_column_values_to_be_positive:
+              column_name: price
+
+  - name: stg_preferences
+    description: "Deduplicates customer preferences to retain only the most relevant data."
+    columns:
+      - name: memberid
+        description: "Unique identifier for a member."
+        tests:
+          - not_null
+
+      - name: preference
+        description: "Custom preference selected by the customer (e.g., No Salt, Extra Cheese)."

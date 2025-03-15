@@ -1,0 +1,65 @@
+version: 2
+
+models:
+  - name: mart_gross_revenue
+    description: |
+      This model calculates the total gross revenue per store and campaign.
+      - The CTE `revenue_summary` aggregates the total revenue (`SUM(total)`) per store and campaign.
+      - The model filters out records where `campaignname` is NULL to ensure only relevant campaign-related revenue is included.
+      - The final SELECT retrieves the summarized revenue per store and campaign.
+    columns:
+      - name: storeid
+        description: "Unique identifier for the store."
+      - name: campaignname
+        description: "Marketing campaign associated with the store revenue."
+      - name: total_revenue
+        description: "Total revenue generated from sales associated with the campaign."
+
+  - name: mart_spending_members
+    description: |
+      This model identifies the highest and lowest spending members per month.
+      - The CTE `monthly_spending` aggregates total spending per member by month.
+      - The CTE `ranked_spending` assigns rankings using `RANK()`, determining the top and bottom spenders per month.
+      - The final SELECT filters only the highest and lowest spending members for each month.
+    columns:
+      - name: month_year
+        description: "Month and year of the spending analysis, formatted as 'Mon-YYYY'."
+      - name: membername
+        description: "Full name of the member."
+      - name: total_spent
+        description: "Total amount spent by the member in the given month."
+      - name: highest_rank
+        description: "Rank of the highest spender in that month."
+      - name: lowest_rank
+        description: "Rank of the lowest spender in that month."
+
+  - name: mart_popular_items
+    description: |
+      This model retrieves the top 2 most and least popular items for each month.
+      - The CTE `item_popularity` counts how many times each item was ordered in a given month.
+      - The CTE `ranked_items` assigns rankings using `RANK()` for both most and least popular items.
+      - The final SELECT filters only the top 2 most and least popular items per month.
+    columns:
+      - name: month_year
+        description: "Month and year of item popularity analysis, formatted as 'Mon-YYYY'."
+      - name: itemname
+        description: "Name of the item."
+      - name: order_count
+        description: "Total number of times the item was ordered."
+      - name: most_popular_rank
+        description: "Rank of the item based on popularity (lower is more popular)."
+      - name: least_popular_rank
+        description: "Rank of the item based on least popularity (lower is less popular)."
+
+  - name: mart_order_processing_times
+    description: |
+      This model calculates the average order processing and delivery times per store.
+      - The CTE `processing_times` extracts timestamps for when orders were 'Submitted' and 'Delivered'.
+      - The CTE `avg_times` calculates the average delivery duration per store using INTERVAL calculations.
+      - The final SELECT returns the store ID along with the computed average delivery time.
+    columns:
+      - name: storeid
+        description: "Unique identifier for the store."
+      - name: avg_delivery_time
+        description: "Average time taken to process and deliver orders in INTERVAL format."
+

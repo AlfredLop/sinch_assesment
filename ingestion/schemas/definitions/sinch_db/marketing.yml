@@ -1,0 +1,28 @@
+database: postgres
+schema: public
+table: marketing_raw
+columns:
+  campaignid:
+    type: "VARCHAR(255)"
+  targetaudience:
+    type: "VARCHAR(255)"
+  storeid:
+    type: "VARCHAR(255)"
+  campaignstartdate:
+    type: "VARCHAR(255)"
+    format: "DD/MM/YYYY"
+  campaignenddate:
+    type: "VARCHAR(255)"
+    format: "DD/MM/YYYY"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
+
+indexes:
+  - name: "idx_campaign_dates"
+    columns: ["campaignstartdate", "campaignenddate"]
+  - name: "idx_targetaudience"
+    columns: ["targetaudience"]
+  - name: "idx_storeid"
+    columns: ["storeid"]

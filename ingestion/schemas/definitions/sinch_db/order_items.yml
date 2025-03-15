@@ -1,0 +1,21 @@
+database: postgres
+schema: public
+table: orders_items_raw
+columns:
+  orderid:
+    type: "VARCHAR(100)"
+  itemname:
+    type: "VARCHAR(255)"
+  price:
+    type: "VARCHAR(255)"
+  source_name:
+    type: "VARCHAR(255)" 
+  insert_date:
+    type: "TIMESTAMP"
+indexes:
+  - name: "idx_order_id_items"
+    columns: ["orderid"]
+  - name: "idx_item_name"
+    columns: ["itemname"]
+  - name: "idx_price"
+    columns: ["price"]

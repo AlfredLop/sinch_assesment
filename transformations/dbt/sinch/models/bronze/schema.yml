@@ -1,0 +1,128 @@
+version: 2
+
+models:
+  - name: base_orders
+    description: "Processed order data including store, member, and campaign information."
+    columns:
+      - name: orderid
+        description: "Unique identifier for an order."
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: memberid
+        description: "Identifier for the member who placed the order."
+
+      - name: storeid
+        description: "Identifier for the store where the order was placed."
+
+      - name: campaignid
+        description: "Campaign ID associated with the order, if applicable."
+
+      - name: orderdate
+        description: "Date when the order was placed."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: subtotal
+        description: "Subtotal amount before taxes or discounts."
+
+      - name: total
+        description: "Final total amount after taxes and adjustments."
+
+  - name: base_order_status
+    description: "Tracks status updates for orders over time."
+    columns:
+      - name: orderid
+        description: "Identifier for the order."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: status
+        description: "Current status of the order (e.g., Submitted, Delivered, Canceled)."
+
+      - name: statustimestamp
+        description: "Timestamp indicating when the status was updated."
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: base_members
+    description: "Contains information about registered members and their membership details."
+    columns:
+      - name: memberid
+        description: "Unique identifier for a member."
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: membershiptype
+        description: "Type of membership (e.g., Bronze, Silver, Platinum)."
+
+      - name: joindate
+        description: "Date when the member joined."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: expirationdate
+        description: "Date when the membership expires."
+
+  - name: base_marketing
+    description: "Marketing campaigns and target audience data."
+    columns:
+      - name: campaignid
+        description: "Unique identifier for a marketing campaign."
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: targetaudience
+        description: "Intended audience segment for the campaign."
+
+      - name: campaignstartdate
+        description: "Start date of the campaign."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: campaignenddate
+        description: "End date of the campaign."
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: base_orders_items
+    description: "Details about the items included in each order."
+    columns:
+      - name: orderid
+        description: "Identifier for the order."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: itemname
+        description: "Name of the item purchased."
+
+      - name: price
+        description: "Price of the item."
+
+  - name: base_preferences
+    description: "Stores customer preferences for product customizations."
+    columns:
+      - name: memberid
+        description: "Unique identifier for a member."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: preference
+        description: "Custom preference selected by the customer (e.g., No Salt, Extra Cheese)."

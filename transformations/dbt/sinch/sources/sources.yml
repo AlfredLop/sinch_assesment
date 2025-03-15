@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: public
+    description: "Source tables from the PostgreSQL database."
+    database: postgres
+    schema: public
+    tables:
+      - name: marketing_raw
+        description: "Marketing campaign data"
+      - name: members_raw
+        description: "Member information including membership type"
+      - name: order_status_raw
+        description: "Status updates for orders"
+      - name: orders_raw
+        description: "Details of customer orders"
+      - name: orders_items_raw
+        description: "Items included in each order"
+      - name: preferences_raw 
+        description: "Customer preferences for product customizations"
