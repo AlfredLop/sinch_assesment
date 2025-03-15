@@ -5,55 +5,35 @@ The `SchemaLoader` class is responsible for loading database schema definitions 
 
 ## Class and Methods Explanation
 
-### `SchemaLoader`
+### SchemaLoader
 This class is responsible for reading schema definitions stored as YAML files in a specified directory and returning them as Python dictionaries.
 
 #### **`__init__(self, schema_dir: str = "ingestion/schemas/definitions/sinch_db") -> None`**
-**Purpose:**
 - Initializes the `SchemaLoader` instance with the directory path containing YAML schema files.
 - By default, it looks for schema definitions in `ingestion/schemas/definitions/sinch_db`.
 
-**Parameters:**
-- `schema_dir` (str): Path to the directory where schema YAML files are stored.
-
----
-
 #### **`load_tables(self) -> List[Dict[str, Any]]`**
-**Purpose:**
-- Reads all YAML files in the specified directory.
-- Validates if they contain essential metadata (like `database` and `schema`).
-- Converts them into Python dictionaries.
-- Returns a list of dictionaries representing table schemas.
 
-**Steps:**
-1. Initializes an empty list `tables` to store the parsed schema data.
-2. Retrieves the absolute path of the schema directory and prints it.
-3. Iterates over all files in the specified directory.
-4. Checks if a file has a `.yml` extension.
-5. Opens and parses the YAML file into a Python dictionary.
-6. Validates that the required keys (`database` and `schema`) exist.
+- Initializes an empty list `tables` to store the parsed schema data.
+- Retrieves the absolute path of the schema directory and prints it.
+- Iterates over all files in the specified directory.
+- Checks if a file has a `.yml` extension.
+- Opens and parses the YAML file into a Python dictionary.
+- Validates that the required keys (`database` and `schema`) exist.
    - If not found, logs a warning and skips the file.
-7. Appends the validated schema dictionary to the `tables` list.
-8. Logs a success message if schemas are loaded correctly.
-9. Returns the list of schema dictionaries.
+- Appends the validated schema dictionary to the `tables` list.
+- Logs a success message if schemas are loaded correctly.
+- Returns the list of schema dictionaries.
 
-**Returns:**
-- `List[Dict[str, Any]]`: A list of dictionaries where each dictionary represents a table schema with column definitions, constraints, and metadata.
-
-**Exception Handling:**
-- `FileNotFoundError`: Logs an error and raises an exception if the schema directory is missing.
-- `yaml.YAMLError`: Logs an error and raises an exception if there is an issue in parsing the YAML file.
-
----
-
-### Standalone Execution
+### Execution
 The script can be executed independently to test its functionality.
+```python
+from schema_loader import SchemaLoader
 
-**`if __name__ == "__main__":`**
-- Creates an instance of `SchemaLoader`, pointing to `schemas/definitions/sinch_db/`.
-- Calls `load_tables()` to load and validate the schema files.
-- This ensures that the script works correctly when run independently.
-
+schema_loader = SchemaLoader("schemas/definitions/sinch_db")
+tables = schema_loader.load_tables()
+print(tables)  # Prints the list of schema definitions as Python dictionaries
+```
 ## Example YAML Schema File Structure
 Below is an example of a YAML file that `SchemaLoader` expects to process:
 
@@ -72,15 +52,6 @@ tables:
         constraints: ["NOT NULL"]
 ```
 
-## Usage Example
-```python
-from schema_loader import SchemaLoader
-
-schema_loader = SchemaLoader("schemas/definitions/sinch_db")
-tables = schema_loader.load_tables()
-print(tables)  # Prints the list of schema definitions as Python dictionaries
-```
-
 ## Logging and Debugging
 - The script logs detailed messages to track the loading process.
 - If a schema file is missing critical metadata, it logs a warning and skips the file.
@@ -91,7 +62,7 @@ print(tables)  # Prints the list of schema definitions as Python dictionaries
 ## Overview
 This module validates the PostgreSQL database schema against YAML-based schema definitions. It ensures that the actual database schema matches the expected structure, including data types and indexes. The `SchemaValidator` class is responsible for comparing column types, detecting missing or extra columns, and checking for expected indexes.
 
-## Classes and Functions
+## Class and Methods Explanation
 
 ### SchemaValidator
 The `SchemaValidator` class is responsible for:
@@ -131,9 +102,6 @@ Compares the YAML schema definitions with the actual database schema. It checks:
 
 For each table, it logs warnings for missing columns, extra columns, type mismatches, missing indexes, and extra indexes.
 
-#### `close(self)`
-Closes the database connection to ensure proper resource cleanup.
-
 ## Execution
 The script can be executed as a standalone process to validate the schema. When run directly, it:
 1. Loads the database configuration.
@@ -168,10 +136,10 @@ This script helps maintain database integrity and ensures that the schema adhere
 ## Overview
 The `SchemaCreator` class is responsible for creating database tables dynamically based on YAML schema definitions. It reads configuration details from a JSON file, connects to a PostgreSQL database, and generates SQL statements to create tables, indexes, and partitions as specified in the YAML schema files.
 
-## Class: `SchemaCreator`
-This class handles the schema creation process, including defining columns, constraints, indexes, and partitions.
+## Class and Methods Explanation
 
-### **Methods**
+## SchemaCreator
+This class handles the schema creation process, including defining columns, constraints, indexes, and partitions.
 
 ### `__init__(self, db_config: Dict[str, Any])`
 Initializes the `SchemaCreator` instance by establishing a connection to the PostgreSQL database.
@@ -179,85 +147,60 @@ Initializes the `SchemaCreator` instance by establishing a connection to the Pos
 - Uses the `DatabaseConnection` class to manage the connection.
 - Initializes a cursor for executing queries.
 
----
-
 ### `generate_create_table_ddl(self, table_data: Dict[str, Any]) -> str`
 Generates the SQL DDL (Data Definition Language) statements required to create tables.
-
-#### Steps:
-1. **Extracts Schema Information:**
-   - Retrieves `schema_name`, `table_name`, and `columns` from the `table_data` dictionary.
-   
-2. **Defines Columns:**
-   - Iterates through column definitions from the YAML file.
-   - Constructs SQL column definitions, including data types and constraints (e.g., `NOT NULL`).
-   
-3. **Checks for Partitioning:**
-   - Identifies partitioning type (e.g., RANGE, LIST, HASH) and the column to partition by.
-   - If a partition exists, it constructs the partitioning clause.
-   - Supports both `DATE` and `TIMESTAMP` formats.
-   - Creates partitions for `2023` and `2024` dynamically.
-   
-4. **Generates Indexes:**
-   - Checks for any defined indexes in the YAML schema and generates `CREATE INDEX` statements accordingly.
-   
-5. **Returns:**
-   - A list of SQL statements including `CREATE TABLE` and index creation commands.
-
----
+- Retrieves `schema_name`, `table_name`, and `columns` from the `table_data` dictionary.
+- Iterates through column definitions from the YAML file.
+- Constructs SQL column definitions, including data types and constraints (e.g., `NOT NULL`).
+- Identifies partitioning type (e.g., RANGE, LIST, HASH) and the column to partition by.
+- If a partition exists, it constructs the partitioning clause.
+- Supports both `DATE` and `TIMESTAMP` formats.
+- Creates partitions for `2023` and `2024` dynamically.
+- Checks for any defined indexes in the YAML schema and generates `CREATE INDEX` statements accordingly.
+- returns A list of SQL statements including `CREATE TABLE` and index creation commands.
 
 ### `create_table(self, ddl_statement: str) -> None`
 Executes the generated `CREATE TABLE` SQL statements in the PostgreSQL database.
-
-#### Steps:
-1. Logs the query being executed.
-2. Runs the SQL statement using the database cursor.
-3. Commits the changes to the database.
-4. Handles errors and rolls back transactions in case of failure.
-
----
-
-### `close(self) -> None`
-Closes the database connection and cursor when schema creation is complete.
-
----
+- Logs the query being executed.
+- Runs the SQL statement using the database cursor.
+- Commits the changes to the database.
+- Handles errors and rolls back transactions in case of failure.
 
 ## Function: `load_db_config(config_path='docker/servers_local.json') -> Dict[str, Any]`
 Reads the database connection parameters from a JSON configuration file.
+- Loads the JSON file containing database credentials.
+- Extracts details such as `dbname`, `user`, `password`, `host`, and `port`.
+- Returns a dictionary with the connection details.
 
-#### Steps:
-1. Loads the JSON file containing database credentials.
-2. Extracts details such as `dbname`, `user`, `password`, `host`, and `port`.
-3. Returns a dictionary with the connection details.
+## Execution
 
----
+#this is for testing this standalone script
+if __name__ == "__main__":
 
-## **Standalone Execution**
-If the script is run as a standalone program, it:
-1. Loads the database configuration from `servers.json`.
-2. Initializes a `SchemaCreator` instance.
-3. Defines a sample table schema (e.g., `marketing` table).
-4. Generates and executes the necessary SQL statements.
-5. Closes the database connection.
+```python
+    db_config = load_db_config("../docker/servers.json")  # Ensure the correct path
+    print(db_config)
 
----
+    schema_creator = SchemaCreator(db_config)
+    
 
-## **Future Enhancements**
-- **Automated Schema Evolution:**
-  - Extend the script to detect schema changes and generate `ALTER TABLE` statements dynamically.
-- **Support for Additional Partitioning Strategies:**
-  - Implement automatic partition generation beyond just yearly partitions.
-- **Parallel Execution:**
-  - Optimize schema creation by executing multiple `CREATE TABLE` statements concurrently.
-- **Error Logging & Monitoring:**
-  - Integrate a logging framework to store detailed execution logs in a centralized system.
+    test_table = {
+        "schema": "public",
+        "table": "marketing",
+        "columns": {
+            "campaignid": {"type": "VARCHAR(255)", "constraints": ["NOT NULL"]},
+            "targetaudience": {"type": "VARCHAR(255)"},
+            "campaignstartdate": {"type": "DATE", "constraints": ["NOT NULL"], "format": "YYYY-MM-DD"},
+            "campaignenddate": {"type": "DATE", "constraints": ["NOT NULL"], "format": "YYYY-MM-DD"}
+        }
+    }
 
-This `SchemaCreator` module is essential for dynamically managing database schemas in a structured and automated fashion, ensuring consistency between YAML definitions and the actual PostgreSQL database.
-
+    ddl = schema_creator.generate_create_table_ddl(test_table)
+    schema_creator.create_table(ddl)
+    schema_creator.close()
+```
 
 # LOAD_DATA.py
-
-This document provides an in-depth explanation of the data ingestion pipeline implemented in Python. The pipeline reads CSV and TXT files, validates their structure based on YAML schema definitions, converts date formats where applicable, and ingests the processed data into a PostgreSQL database.
 
 ## Overview
 The ingestion pipeline consists of the following key components:
@@ -266,12 +209,11 @@ The ingestion pipeline consists of the following key components:
 - **DataIngestor**: Inserts validated data into a PostgreSQL database.
 - **convert_date_format**: Converts date values to a standardized format.
 
----
+## Class and Methods Explanation
 
-## Class: `FileLoader`
+## FileLoader
 Handles reading files from a specified directory.
 
-### Methods:
 #### `__init__(self, directory: str)`
 Initializes the `FileLoader` class with the directory path where data files are stored.
 
@@ -281,12 +223,10 @@ Retrieves a list of valid CSV and TXT files from the directory and returns them 
 #### `stream_file(self, file_path: str) -> Generator[List[str], None, None]`
 Streams a file line by line, yielding each row as a list of strings.
 
----
 
-## Class: `DataValidator`
+## DataValidator
 Validates file structure and content against the YAML schema.
 
-### Methods:
 #### `__init__(self, schema_loader: SchemaLoader)`
 Initializes the `DataValidator` with an instance of `SchemaLoader` to load the schema definitions from YAML files.
 
@@ -300,19 +240,9 @@ Attempts to adjust date values in the row based on the expected format defined i
 - If a date conversion fails, logs a warning and keeps the original value.
 - Returns `True` if validation succeeds; otherwise, returns `False`.
 
----
-
-## Function: `convert_date_format(date_str: str, expected_format: str) -> Optional[str]`
-Converts date values to a standard format (`YYYY-MM-DD`).
-- Uses a predefined format mapping for common date formats (`DD/MM/YYYY`, `MM/DD/YYYY`, etc.).
-- If conversion fails, logs a warning and returns the original string.
-
----
-
 ## Class: `DataIngestor`
 Handles efficient data ingestion into PostgreSQL with batch processing.
 
-### Methods:
 #### `__init__(self, db_config: Dict[str, str], schema_loader: SchemaLoader)`
 Initializes the `DataIngestor` with a PostgreSQL database connection and a `DataValidator` instance.
 
@@ -329,7 +259,10 @@ Inserts processed data into the database in batches of `BATCH_SIZE`.
 - Appends `source_name` (filename) and `insert_date` (current timestamp) to each row.
 - Uses `executemany` for batch insertion into PostgreSQL.
 
----
+## Function: `convert_date_format(date_str: str, expected_format: str) -> Optional[str]`
+Converts date values to a standard format (`YYYY-MM-DD`).
+- Uses a predefined format mapping for common date formats (`DD/MM/YYYY`, `MM/DD/YYYY`, etc.).
+- If conversion fails, logs a warning and returns the original string.
 
 ## Execution Flow
 1. **Load Configuration:** Database credentials are loaded from a JSON file.
@@ -343,28 +276,15 @@ Inserts processed data into the database in batches of `BATCH_SIZE`.
    - Valid rows are inserted into the database in batches.
    - Invalid rows are written to an error file (if necessary).
 
----
-
 ## Error Handling & Logging
 - Errors during schema validation or data transformation are logged with detailed messages.
 - Failed inserts due to invalid data are logged and stored in an error file.
 - Each function includes error handling to prevent crashes during ingestion.
 
----
-
 ## Configuration Files
 - **`servers_local.json`**: Stores database credentials.
 - **YAML Schema Files**: Define the structure, constraints, and expected data types for each table.
 
----
-
-## Future Enhancements
-- Implement multithreading for parallel file processing.
-- Add support for schema evolution (detecting and applying schema changes dynamically).
-- Extend support for additional file formats (JSON, Parquet, etc.).
-- Improve logging to include detailed statistics about ingestion performance.
-
----
 
 ## Running the Script
 To execute the ingestion process, run:
@@ -374,8 +294,6 @@ python load_data.py
 Ensure that the correct configurations are set in the `servers_local.json` file and that the source directory contains valid CSV/TXT files.
 
 ---
-
-This document serves as a comprehensive guide to understanding and working with the ingestion pipeline. Let me know if you need any additional details or modifications!
 
 
 
