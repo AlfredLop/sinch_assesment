@@ -12,7 +12,7 @@ columns:
   campaignid:
     type: "VARCHAR(255)"
   orderdate:
-    type: "VARCHAR(255)"
+    type: "DATE"
     format: "DD/MM/YYYY"
   subtotal:
     type: "VARCHAR(255)"
@@ -22,6 +22,11 @@ columns:
     type: "VARCHAR(255)" 
   insert_date:
     type: "TIMESTAMP"
+
+partition:
+  type: "RANGE"
+  column: "orderdate"
+  date_partition_format: "DD/MM/YYYY"
 
 indexes:
   - name: "idx_order_id"
