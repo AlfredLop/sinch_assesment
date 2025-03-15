@@ -1,10 +1,11 @@
 
-# OVERVIEW
+# PROJECT OVERVIEW
 This repo contains a pipelie ingesting data thru python code into a postgres db and the transforming it using dbt framework.
 The 2 main componets/modules are INGESTION and TRANSFORMATIONS
 
 # Future Enhancement
 - Orchestrate ingest, data load and transformation using airflow.
+- create CI/CD pipelines, to create an image to be pushed to a container registry when new code is commited to a main branch.
 
 # OVERVIEW INGESTION
 This module uses a yml file based schema creation module.  
@@ -25,7 +26,7 @@ Python code ingest csv txt files, validates them agains yml file and inserts int
 - Uploads are done on a streaming fashion, reading line 1 by 1 and inserting to db in chunks of 10000, that can be adjusted based on need.
 
 ## Future enhacements
-- Extraction from SFTP, API, Other systems or databases.
+- Extraction from SFTP, API, Other systems or databases into S3.
 - Automatic schema evolution management, create alter statements dinamically based of schema.yml file.
 - DockerFile to define image and upload to ECR.
 - Upload data using multithreading and map to distributed uploads.
@@ -48,4 +49,6 @@ Models are full loads or incremental loads based on a merge incremental strategy
 
 ## Future enhancements
 - Use post hooks to drop base and stg models.
+- Use multiple threads for concurrent jobs.
+- DockerFile to define image and upload to ECR.
 - Introduce dbt metrics semantic layer to manage metrics in a centrilized location.
