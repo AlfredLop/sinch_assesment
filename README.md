@@ -39,6 +39,9 @@ USE DOCKER COMPOSE UP TO GET THE DB GOING
 4. run python run_schema_creation
 5. run python run_data_load.py
 
+## Documentation
+You will find detailed documentation of classes and methods in ingestion/readme.md
+
 # OVERVIEW TRANSFORMATIOS
 This module uses dbt framework, to store sql transformations in a medallion architecture, including tests, and documentation.
 Models are full loads or incremental loads based on a merge incremental strategy, out of the box test like unique, not null have been used but also custom test have been created like expected positive values.
@@ -68,3 +71,10 @@ USE DOCKER COMPOSE UP TO GET THE DB GOING
 3. cd into transfomations/dbt/sinch
 4. run dbt deps (install packages)
 5. run dbt build (this will run models and tests)
+
+## Documentation
+Documentation is generated in dbt automatically based on the schema yml files.
+To see it, run:
+- dbt docs generate
+- dbt docs serve
+
