@@ -1,4 +1,8 @@
-{{ config(materialized='table') }}
+{{ 
+    config(
+        materialized='table'
+    ) 
+}}
 
 WITH filtered_preferences AS (
     SELECT 

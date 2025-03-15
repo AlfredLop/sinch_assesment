@@ -1,4 +1,8 @@
-{{ config(materialized='table') }}
+{{ 
+    config(
+        materialized='table'
+    ) 
+}}
 
 WITH deduplicated_members AS (
     SELECT 
@@ -12,6 +16,7 @@ WITH deduplicated_members AS (
 
 SELECT 
     memberid,
+    membername,
     membershiptype,
     joindate,
     expirationdate,
