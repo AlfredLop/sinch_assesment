@@ -58,8 +58,8 @@ models:
       - name: insert_date
         description: "Timestamp when the record was inserted."
 
-  - name: build_preferences
-    description: "Stores customer preferences for order customizations."
+  - name: build_member_preferences
+    description: "Stores customer preferences for order customizations combined with members table for analytics."
     columns:
       - name: memberid
         description: "Unique identifier of the member."
