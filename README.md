@@ -4,7 +4,7 @@ This repo contains a pipelie ingesting data thru python code into a postgres db 
 The 2 main componets/modules are INGESTION and TRANSFORMATIONS
 
 # Future Enhancement
-- Orchestrate ingest, data load and transformation using airflow.
+- Orchestrate ingestion and transformation using airflow.
 - create CI/CD pipelines, to create an image to be pushed to a container registry when new code is commited to a main branch.
 
 # OVERVIEW INGESTION
@@ -23,7 +23,7 @@ Python code ingest csv txt files, validates them agains yml file and inserts int
 - Partition by date was added only to the orders table. (order_status could have too)
 - Because of this orderdate field has to be DATE type for the partition to work.
 - Indexes were added to columns with JOIN potential to other tables, or potential with alot of queries.
-- Uploads are done on a streaming fashion, reading line 1 by 1 and inserting to db in chunks of 10000, that can be adjusted based on need.
+- Uploads are done streaming the file, line by line and inserting to db in chunks of 10000, this makes it extremely memory efficient and suitable for large file ingestion.
 
 ## Future enhacements
 - Extraction from SFTP, API, Other systems or databases into S3.
@@ -54,12 +54,14 @@ Models are full loads or incremental loads based on a merge incremental strategy
 - Only orders models were created as an incremental model, processing only data equal or greater that the last orderdate.
 - Medallion architecture, BRONZE to CAST data types, SILVER to deduplicate, GOLD to do joins and mart to do aggregations.
 - In BRONZE zone, added warnings(this means job does not fail) for fields expected to be unique, this is to investigate why are we recieving duplicates.
-- in SILVER, I deduplicate and added business logic tests like check the total amount has only positive values or that the start date of the campaing end date is greater than the start date.
+- in SILVER, I deduplicate, enforce uniqueness and referencial integrity and added business logic tests like check the total amount has only positive values or that the start date of the campaing end date is greater than the start date.
 - In GOLD zone, I joined order with members and marketing, since they have a many to one and dont increase the grain, making queries faster for end users.
 - in MART, contains specific scenarios requested from end users.
+- ERD was created for SILVER since it is when Primary keys and Foreing keys are enforced, and also for GOLD...since it is the tables exposed to the end user.
 
 ## Future enhancements
 - Use post hooks to drop base and stg models.
+- add access layer to apply row level security or masking.
 - Use multiple threads for concurrent jobs.
 - DockerFile to define image and upload to ECR.
 - Introduce dbt metrics semantic layer to manage metrics in a centrilized location.

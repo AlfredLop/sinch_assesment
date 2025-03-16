@@ -12,6 +12,10 @@ models:
 
       - name: memberid
         description: "Identifier for the member who placed the order."
+        tests:
+          - relationships:
+              to: ref('stg_members') 
+              field: memberid
       
       - name: storeid
         description: "Identifier for the store where the order was placed."
