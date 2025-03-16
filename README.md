@@ -82,11 +82,11 @@ To see it, run:
 
 # ERDs & Lineage
 -- ERD Staging
-![ERD Diagram](erd_stg.png)
+![ERD Diagram](images/erd_stg.png)
 
 -- ERD Gold
-![ERD Diagram](gold_erd.png)
+![ERD Diagram](images/gold_erd.png)
 
 --Lineage
-![lineage](lineage.png)
+![lineage](images/lineage.png)
 
