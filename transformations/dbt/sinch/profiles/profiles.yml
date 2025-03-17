@@ -1,0 +1,47 @@
+re_pipeline:
+  outputs:
+    dev:
+      dbname:
+      - dbname
+      host:
+      - host
+      pass:
+      - dev_password
+      port:
+      - port
+      schema:
+      - dev_schema
+      threads:
+      - 1 or more
+      type: postgres
+      user:
+      - dev_username
+    prod:
+      dbname:
+      - dbname
+      host:
+      - host
+      pass:
+      - prod_password
+      port:
+      - port
+      schema:
+      - prod_schema
+      threads:
+      - 1 or more
+      type: postgres
+      user:
+      - prod_username
+  target: dev
+sinch:
+  outputs:
+    dev:
+      dbname: postgres
+      host: localhost
+      pass: mysecretpassword
+      port: 5432
+      schema: public
+      threads: 1
+      type: postgres
+      user: postgres
+  target: dev

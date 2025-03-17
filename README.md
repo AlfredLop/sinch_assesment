@@ -69,6 +69,7 @@ Models are full loads or incremental loads based on a merge incremental strategy
 - Use multiple threads for concurrent jobs.
 - DockerFile to define image and upload to ECR.
 - Introduce dbt metrics semantic layer to manage metrics in a centrilized location.
+- create a setup enviroment shell script to capture connection creds and new dbt profile location.
 
 ## Usage
 USE DOCKER COMPOSE UP TO GET THE DB GOING
@@ -76,7 +77,7 @@ USE DOCKER COMPOSE UP TO GET THE DB GOING
 2. install transfomations/requirements.txt file
 3. cd into transfomations/dbt/sinch
 4. run dbt deps (install packages)
-5. run dbt build (this will run models and tests)
+5. run dbt build --profiles-dir profiles\  (this will run models and tests)
 
 ## Documentation
 Documentation is generated in dbt automatically based on the schema yml files.
