@@ -6,7 +6,7 @@ The 2 main componets/modules are INGESTION and TRANSFORMATIONS
 # Future Enhancement
 - Orchestrate ingestion and transformation using airflow.
 - create CI/CD pipelines, to create an image to be pushed to a container registry when new code is commited to a main branch.
-- create an alerting module to add alerts from successful/failed jobs sent to slack/email/teams channels.
+- create an alerting module to add alerts from successful/failed jobs sent to slack/email/teams channels and to an observability tool like datadog.
 
 # OVERVIEW INGESTION
 This module uses a yml file based schema creation module.  
