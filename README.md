@@ -31,6 +31,7 @@ Python code ingest csv txt files, validates them agains yml file and inserts int
 - Automatic schema evolution management, create alter statements dinamically based of schema.yml file.
 - DockerFile to define image and upload to ECR.
 - Upload data using multithreading and map to distributed uploads.
+- Add unit test using unittest library
 
 ## Usage
 USE DOCKER COMPOSE UP TO GET THE DB GOING
@@ -62,6 +63,7 @@ Models are full loads or incremental loads based on a merge incremental strategy
 
 ## Future enhancements
 - Do more data profiling, check completeness for each column, check expected values, check for outliers and define more data cleaning steps based on that.
+- add source to target mapping documentation.
 - Use post hooks to drop base and stg models.
 - add access layer to apply row level security or masking.
 - Use multiple threads for concurrent jobs.
