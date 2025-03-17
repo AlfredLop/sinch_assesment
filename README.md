@@ -82,8 +82,8 @@ USE DOCKER COMPOSE UP TO GET THE DB GOING
 ## Documentation
 Documentation is generated in dbt automatically based on the schema yml files.
 To see it, run:
-- dbt docs generate
-- dbt docs serve
+- dbt docs generate --profiles-dir profiles/
+- dbt docs serve --profiles-dir profiles/
 
 # ERDs & Lineage
 -- ERD Staging
