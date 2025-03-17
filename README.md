@@ -61,6 +61,7 @@ Models are full loads or incremental loads based on a merge incremental strategy
 - ERD was created for SILVER since it is when Primary keys and Foreing keys are enforced, and also for GOLD...since it is the tables exposed to the end user.
 
 ## Future enhancements
+- Do more data profiling, check completeness for each column, check expected values, check for outliers and define more data cleaning steps based on that.
 - Use post hooks to drop base and stg models.
 - add access layer to apply row level security or masking.
 - Use multiple threads for concurrent jobs.
