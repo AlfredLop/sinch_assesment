@@ -78,12 +78,12 @@ class SchemaValidator:
         """
         try:
             with self.db.connection.cursor() as cursor:
-                cursor.execute(query, (schema_name,))
-                rows = cursor.fetchall()
+                cursor.execute(query, (schema_name,)) #defining a tuple with 1 value
+                rows = cursor.fetchall() #retrieve all rows from the result of a SQL, in tuple format
                 for table_name, column_name, data_type in rows:
                     if table_name not in db_schema:
                         db_schema[table_name] = {}
-                    db_schema[table_name][column_name] = self.normalize_type(data_type)
+                    db_schema[table_name][column_name] = self.normalize_type(data_type) #creating nested dic for each table with its columns.
         except psycopg2.Error as e:
             logging.error(f"Error retrieving schema from database: {e}")
             raise
@@ -100,11 +100,13 @@ class SchemaValidator:
             Dict[str, List[str]]: A dictionary where keys are table names and values are lists of indexed columns.
         """
         indexes = {}
+        ##this below is decoding the pg_index since it comes in codes and not the actual names
+        ##getting col names as a list of values
         query = """
             SELECT
                 tab.relname AS table_name,
                 idx.relname AS index_name,
-                array_agg(att.attname) AS column_names
+                array_agg(att.attname) AS column_names 
             FROM
                 pg_index idx_info
                 JOIN pg_class idx ON idx.oid = idx_info.indexrelid
@@ -140,6 +142,8 @@ class SchemaValidator:
             schema_name = yaml_table["schema"]
             table_name = yaml_table["table"]
 
+            # loopinhg thru the yamls, getting the ACTUALS schema from the db and sending warning if table doesnt exists in db.
+
             if schema_name not in actual_schema:
                 actual_schema = self.get_database_schema(schema_name)
 
@@ -151,7 +155,7 @@ class SchemaValidator:
             expected_columns = {col: self.normalize_type(details["type"]) for col, details in yaml_table["columns"].items()}
             actual_columns = actual_schema.get(table_name, {})
 
-            # Column comparisons
+            # Column comparisons using SET to compare the keys(column names)
             missing_columns = set(expected_columns) - set(actual_columns)
             extra_columns = set(actual_columns) - set(expected_columns)
             type_mismatches = {
@@ -160,6 +164,7 @@ class SchemaValidator:
             }
 
             # Remove false positives where missing columns are actually present
+            # we were having case sentitive issues but were fixed with normilize function
             if not missing_columns:
                 logging.info(f"All expected columns are present in '{table_name}'.")
 
@@ -168,6 +173,7 @@ class SchemaValidator:
             db_indexes = actual_indexes.get(table_name, {})
             expected_indexes = {idx["name"]: idx["columns"] for idx in yaml_table.get("indexes", [])}
 
+            #could have used sets
             missing_indexes = {name for name in expected_indexes if name not in db_indexes}
             extra_indexes = {name for name in db_indexes if name not in expected_indexes}
 

@@ -8,6 +8,8 @@ from datetime import datetime
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.append(project_root)
+##This adds the project root directory (two levels above the current script) to Python's sys.path, 
+# which allows Python to import modules from that location.
 
 from ingestion.schema_utils.load_schema import SchemaLoader
 from ingestion.utils.db_connection import DatabaseConnection
@@ -33,7 +35,7 @@ def convert_date_format(date_str: str, expected_format: str) -> Optional[str]:
         "MM/DD/YYYY": "%m/%d/%Y",
         "YYYY-MM-DD": "%Y-%m-%d"
     }
-
+    ## this is because we were given day month, not the usua; mpnth day us format
     if expected_format not in format_mapping:
         logging.error(f"Unsupported date format in YAML: {expected_format}")
         return date_str
@@ -69,7 +71,7 @@ class FileLoader:
             with open(file_path, mode="r", encoding="utf-8") as file:
                 reader = csv.reader(file)
                 for row in reader:
-                    yield row
+                    yield row 
         except Exception as e:
             logging.error(f"Error loading {file_path}: {e}", exc_info=True)
 
@@ -135,7 +137,7 @@ class DataIngestor:
         logging.info(f"Starting ingestion for {file_path}")
 
         loader = FileLoader(os.path.dirname(file_path))
-        stream = loader.stream_file(file_path)
+        stream = loader.stream_file(file_path) #generator object, accesing lines only when iterated
 
         try:
             header = next(stream)
@@ -156,8 +158,12 @@ class DataIngestor:
 
         valid_batch = []
         error_rows = []  # Collect error rows in memory
+        #So you're not looping through a list in memory — 
+        # you're streaming one row at a time from disk, using the power of yield
+        #You're not keeping all lines in memory (like file.readlines())
         for row in stream:
             # Create a copy of the row to avoid modifying the original row in multiple iterations
+            #this to dont modify raw data and be able to collect true erros and debug
             current_row = row.copy()
             if self.validator.validate_data(current_row, expected_columns, file_path):
                 valid_batch.append(current_row)
@@ -195,7 +201,7 @@ class DataIngestor:
 
         try:
             with self.db.connection.cursor() as cursor:
-                cursor.executemany(query, processed_rows)
+                cursor.executemany(query, processed_rows) #bulk operation, xecute the same SQL statement multiple times, with different parameters each time.
                 self.db.connection.commit()
             logging.info(f"Inserted {len(rows)} rows into {table_name} (Source: {source_name})")
         except psycopg2.Error as e:

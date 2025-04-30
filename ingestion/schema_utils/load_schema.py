@@ -21,7 +21,7 @@ class SchemaLoader:
             for filename in os.listdir(self.schema_dir):
                 if filename.endswith(".yml"):
                     with open(os.path.join(self.schema_dir, filename), "r") as file:
-                        table_data = yaml.safe_load(file)
+                        table_data = yaml.safe_load(file) #this part converts to dict and list of dics
                         if "database" not in table_data or "schema" not in table_data:
                             logging.warning(f"Skipping {filename}: Missing database/schema metadata.")
                             continue  # Skip files without metadata

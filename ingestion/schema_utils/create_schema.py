@@ -33,7 +33,7 @@ class SchemaCreator:
                 columns_sql = []
                 for col_name, col_data in columns.items():
                     col_type = col_data["type"]
-                    col_constraints = " ".join(col_data.get("constraints", []))
+                    col_constraints = " ".join(col_data.get("constraints", [])) #using get in case constraints are empty which in this case all are.
                     columns_sql.append(f"{col_name} {col_type} {col_constraints}".strip())
 
                 columns_sql_str = ",\n  ".join(columns_sql)
